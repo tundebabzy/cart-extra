@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include cart_extra *.css
+recursive-include cart_extra *.csv
+recursive-include cart_extra *.html
+recursive-include cart_extra *.ico
+recursive-include cart_extra *.js
+recursive-include cart_extra *.json
+recursive-include cart_extra *.md
+recursive-include cart_extra *.png
+recursive-include cart_extra *.py
+recursive-include cart_extra *.svg
+recursive-include cart_extra *.txt
+recursive-exclude cart_extra *.pyc
