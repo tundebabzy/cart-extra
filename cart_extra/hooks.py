@@ -116,7 +116,7 @@ app_license = "MIT"
 # Overriding Whitelisted Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "cart_extra.event.get_events"
-# }
+override_whitelisted_methods = {
+	"erpnext.shopping_cart.cart.update_cart": "cart_extra.shopping_cart.cart.update_cart"
+}
 
