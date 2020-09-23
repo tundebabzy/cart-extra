@@ -5,7 +5,6 @@ from cart_extra.session import get_extra_cart_session
 from cart_extra.utils import create_lead_if_needed
 from erpnext.shopping_cart.doctype.shopping_cart_settings.\
     shopping_cart_settings import get_shopping_cart_settings
-<<<<<<< HEAD
 from erpnext.shopping_cart.cart import apply_cart_settings,\
     get_applicable_shipping_rules, decorate_quotation_doc,\
     get_shopping_cart_menu as get_shopping_cart_menu_original,\
@@ -20,11 +19,6 @@ def set_cart_count(quotation=None):
 
         if hasattr(frappe.local, "cookie_manager"):
             frappe.local.cookie_manager.set_cookie("cart_count", cart_count)
-=======
-from erpnext.shopping_cart.cart import apply_cart_settings, set_cart_count,\
-    get_applicable_shipping_rules, decorate_quotation_doc,\
-    get_shopping_cart_menu as get_shopping_cart_menu_original
->>>>>>> 689a2665c9ae5e0b684bf54ee52d1e541dffccdd
 
 
 @frappe.whitelist(allow_guest=True)
@@ -88,15 +82,10 @@ def update_cart(item_code, qty, with_items=False):
         }
 
 
-<<<<<<< HEAD
 @frappe.whitelist(allow_guest=True)
 def get_cart_quotation(doc=None):
     if frappe.session.user != 'Guest':
         return get_cart_quotation_original(doc)
-=======
-@frappe.whitelist()
-def get_cart_quotation(doc=None):
->>>>>>> 689a2665c9ae5e0b684bf54ee52d1e541dffccdd
     session = get_extra_cart_session()
     party = _party(session['token'])
 
@@ -120,11 +109,8 @@ def get_cart_quotation(doc=None):
 
 @frappe.whitelist(allow_guest=True)
 def get_shopping_cart_menu(context=None):
-<<<<<<< HEAD
     if frappe.session.user != 'Guest':
         return get_shopping_cart_menu_original(context)
-=======
->>>>>>> 689a2665c9ae5e0b684bf54ee52d1e541dffccdd
     if not context:
         context = get_cart_quotation()
     return get_shopping_cart_menu_original(context=context)
