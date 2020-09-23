@@ -116,6 +116,9 @@ web_include_js = "/assets/cart_extra.js"
 # Overriding Whitelisted Methods
 # ------------------------------
 #
+# on_session_creation = "erpnext.shopping_cart.utils.set_cart_count"
+on_logout = "cart_extra.utils.logout"
+
 override_whitelisted_methods = {
     'erpnext.shopping_cart.cart.update_cart': 'cart_extra.shopping_cart.cart.update_cart',
     'erpnext.shopping_cart.cart.get_shopping_cart_menu': 'cart_extra.shopping_cart.cart.get_shopping_cart_menu'
