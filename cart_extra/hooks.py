@@ -117,7 +117,8 @@ web_include_js = "/assets/cart_extra.js"
 # ------------------------------
 #
 override_whitelisted_methods = {
-    'erpnext.shopping_cart.cart.update_cart': 'cart_extra.shopping_cart.cart.update_cart'
+    'erpnext.shopping_cart.cart.update_cart': 'cart_extra.shopping_cart.cart.update_cart',
+    'erpnext.shopping_cart.cart.get_shopping_cart_menu': 'cart_extra.shopping_cart.cart.get_shopping_cart_menu'
 }
 
 fixtures = [
