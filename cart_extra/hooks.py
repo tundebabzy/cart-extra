@@ -20,7 +20,7 @@ app_license = "MIT"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/cart_extra/css/cart_extra.css"
-# web_include_js = "/assets/cart_extra/js/cart_extra.js"
+web_include_js = "/assets/cart_extra.js"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
@@ -116,7 +116,7 @@ app_license = "MIT"
 # Overriding Whitelisted Methods
 # ------------------------------
 #
-override_whitelisted_methods = {
-	"erpnext.shopping_cart.cart.update_cart": "cart_extra.shopping_cart.cart.update_cart"
-}
+# override_whitelisted_methods = {
+# 	"erpnext.shopping_cart.cart.update_cart": "cart_extra.shopping_cart.cart.update_cart"
+# }
 
