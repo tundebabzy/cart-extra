@@ -1,0 +1,123 @@
+[
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.563560",
+  "name": "Existing Customer",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Existing Customer"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.573832",
+  "name": "Reference",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Reference"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.578459",
+  "name": "Advertisement",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Advertisement"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.582798",
+  "name": "Cold Calling",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Cold Calling"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.587132",
+  "name": "Exhibition",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Exhibition"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.592054",
+  "name": "Supplier Reference",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Supplier Reference"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.596295",
+  "name": "Mass Mailing",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Mass Mailing"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.600559",
+  "name": "Customer's Vendor",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Customer's Vendor"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.604918",
+  "name": "Campaign",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Campaign"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2019-10-23 08:21:51.609238",
+  "name": "Walk In",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Walk In"
+ },
+ {
+  "details": "<div><br></div>",
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2020-09-23 01:51:50.443634",
+  "name": "Website Visitor",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Website Visitor"
+ }
+]
