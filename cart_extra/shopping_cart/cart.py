@@ -116,10 +116,15 @@ def get_shopping_cart_menu(context=None):
     return get_shopping_cart_menu_original(context=context)
 
 
-def _get_cart_quotation(party):
+def _get_cart_quotation(party=None):
     '''
     Return the open Quotation of type "Shopping Cart" or make a new one
     '''
+    if not party:
+        session = get_extra_cart_session()
+        create_lead_if_needed(session['token'])
+        party = _party(session['token'])
+
     lead_name = frappe.db.sql(
         '''
         select name from `tabLead` where lead_name = %s order by creation desc
