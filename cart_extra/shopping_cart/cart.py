@@ -120,23 +120,30 @@ def _get_cart_quotation(party=None):
     '''
     Return the open Quotation of type "Shopping Cart" or make a new one
     '''
+    lead = None
     if not party:
         session = get_extra_cart_session()
-        create_lead_if_needed(session['token'])
+        lead = create_lead_if_needed(session['token'])
         party = _party(session['token'])
+    elif party and party['name']:
+        lead = create_lead_if_needed(party['name'])
 
-    lead_name = frappe.db.sql(
-        '''
-        select name from `tabLead` where lead_name = %s order by creation desc
-        ''',
-        (party['name'],), as_dict=True
-    )
+    if not lead:
+        lead_name = frappe.db.sql(
+            '''
+            select name from `tabLead` where lead_name = %s order by creation
+            desc limit 1
+            ''',
+            (party['name'],), as_dict=True
+        )
+
     quotation = None
-    if lead_name:
+    if lead_name or lead.lead_name:
         quotation = frappe.get_all(
             "Quotation", fields=["name"],
             filters={
-                "party_name": lead_name[0].name, "order_type": "Shopping Cart",
+                "party_name": lead.lead_name if lead else lead_name[0].name,
+                "order_type": "Shopping Cart",
                 "docstatus": 0
             },
             order_by="modified desc", limit_page_length=1)
