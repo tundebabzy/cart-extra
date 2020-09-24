@@ -122,7 +122,8 @@ on_logout = "cart_extra.utils.logout"
 override_whitelisted_methods = {
     'erpnext.shopping_cart.cart.update_cart': 'cart_extra.shopping_cart.cart.update_cart',
     'erpnext.shopping_cart.cart.get_shopping_cart_menu': 'cart_extra.shopping_cart.cart.get_shopping_cart_menu',
-    'erpnext.shopping_cart.cart.get_cart_quotation': 'cart_extra.shopping_cart.cart.get_cart_quotation'
+    'erpnext.shopping_cart.cart.get_cart_quotation': 'cart_extra.shopping_cart.cart.get_cart_quotation',
+    'erpnext.shopping_cart.product_info.get_product_info_for_website': 'cart_extra.shopping_cart.product_info.get_product_info_for_website'
 }
 
 fixtures = [
