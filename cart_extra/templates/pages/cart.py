@@ -6,3 +6,4 @@ no_sitemap = 1
 
 def get_context(context):
     context.update(get_cart_quotation())
+    context.update({'is_guest': frappe.session.user == 'Guest'})

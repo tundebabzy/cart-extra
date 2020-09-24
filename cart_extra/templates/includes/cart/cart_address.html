@@ -7,68 +7,84 @@
 		<div class="h6 text-uppercase">{{ _("Shipping Address") }}</div>
 		<div id="cart-shipping-address" class="panel-group"
 			data-fieldname="shipping_address_name">
-			{% if not shipping_addresses %}
-				<div class="form-group">
-					<label for="name">Name</label>
-					<input type="text" class="form-control" id="name" placeholder="Name">
-				</div>
-				<div class="form-group">
-					<label for="address1">Address Line 1</label>
-					<input type="text" class="form-control" id="address1">
-				</div>
-				<div class="form-group">
-					<label for="address2">Address Line 2</label>
-					<input type="text" class="form-control" id="address2">
-				</div>
-				<div class="form-group">
-					<label for="city">City</label>
-					<input type="text" class="form-control" id="city">
-				</div>
-				<div class="form-group">
-					<label for="state">State</label>
-					<input type="text" class="form-control" id="state">
-				</div>
-				<div class="form-group">
-					<label for="zip">ZIP</label>
-					<input type="text" class="form-control" id="zip">
+			{% if is_guest %}
+				<div id="shipping">
+					<form id="shipping-form">
+						<div class="form-group">
+							<label for="full_name">Name</label>
+							<input type="text" class="form-control" id="name" name="full_name" placeholder="Name">
+						</div>
+						<div class="form-group">
+							<label for="address1">Address Line 1</label>
+							<input type="text" class="form-control" id="address1" name="address1">
+						</div>
+						<div class="form-group">
+							<label for="address2">Address Line 2</label>
+							<input type="text" class="form-control" id="address2" name="address2">
+						</div>
+						<div class="form-group">
+							<label for="city">City</label>
+							<input type="text" class="form-control" id="city" name="city">
+						</div>
+						<div class="form-group">
+							<label for="state">State</label>
+							<input type="text" class="form-control" id="state" name="state">
+						</div>
+						<div class="form-group">
+							<label for="zip">ZIP</label>
+							<input type="text" class="form-control" id="zip" name="zip">
+						</div>
+					</form>
 				</div>
 			{% endif %}
             {% for address in shipping_addresses %}
                 {{ show_address(address, doc, "shipping_address_name", select_address) }}
             {% endfor %}
-        </div>
-		<a class="btn btn-default btn-sm" href="/addresses">
-			{{ _("Manage Addresses") }}</a>
+		</div>
+		{% if not is_guest %}
+			<a class="btn btn-default btn-sm" href="/addresses">
+				{{ _("Manage Addresses") }}
+			</a>
+		{% endif %}
 	</div>
 	<div class="col-sm-6">
         <div class="h6 text-uppercase">{{ _("Billing Address") }}</div>
 		<div id="cart-billing-address" class="panel-group"
 			data-fieldname="customer_address">
-			{% if not shipping_addresses %}
-				<div class="form-group">
-					<label for="name">Name</label>
-					<input type="text" class="form-control" id="name" placeholder="Name">
+			{% if is_guest %}
+				<div id="billing">
+					<form id="billing-form">
+						<div class="form-group">
+							<label for="full_name">Name</label>
+							<input type="text" class="form-control" id="full_name" placeholder="Name" name="full_name">
+						</div>
+						<div class="form-group">
+							<label for="address1">Address Line 1</label>
+							<input type="text" class="form-control" id="address1" name="address1">
+						</div>
+						<div class="form-group">
+							<label for="address2">Address Line 2</label>
+							<input type="text" class="form-control" id="address2" name="address2">
+						</div>
+						<div class="form-group">
+							<label for="city">City</label>
+							<input type="text" class="form-control" id="city" name="city">
+						</div>
+						<div class="form-group">
+							<label for="state">State</label>
+							<input type="text" class="form-control" id="state" name="state">
+						</div>
+						<div class="form-group">
+							<label for="zip">ZIP</label>
+							<input type="text" class="form-control" id="zip" name="zip">
+						</div>
+					</form>
 				</div>
-				<div class="form-group">
-					<label for="address1">Address Line 1</label>
-					<input type="text" class="form-control" id="address1">
-				</div>
-				<div class="form-group">
-					<label for="address2">Address Line 2</label>
-					<input type="text" class="form-control" id="address2">
-				</div>
-				<div class="form-group">
-					<label for="city">City</label>
-					<input type="text" class="form-control" id="city">
-				</div>
-				<div class="form-group">
-					<label for="state">State</label>
-					<input type="text" class="form-control" id="state">
-				</div>
-				<div class="form-group">
-					<label for="zip">ZIP</label>
-					<input type="text" class="form-control" id="zip">
-				</div>
+				{% if is_guest %}
+					<button class="btn btn-default btn-sm" id="copy">
+						{{ _("Same as Shipping Address")}}
+					</button>
+				{% endif %}
 			{% endif %}
             {% for address in billing_addresses %}
                 {{ show_address(address, doc, "customer_address", select_address) }}
