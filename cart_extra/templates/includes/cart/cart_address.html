@@ -7,6 +7,32 @@
 		<div class="h6 text-uppercase">{{ _("Shipping Address") }}</div>
 		<div id="cart-shipping-address" class="panel-group"
 			data-fieldname="shipping_address_name">
+			{% if not shipping_addresses %}
+				<div class="form-group">
+					<label for="name">Name</label>
+					<input type="text" class="form-control" id="name" placeholder="Name">
+				</div>
+				<div class="form-group">
+					<label for="address1">Address Line 1</label>
+					<input type="text" class="form-control" id="address1">
+				</div>
+				<div class="form-group">
+					<label for="address2">Address Line 2</label>
+					<input type="text" class="form-control" id="address2">
+				</div>
+				<div class="form-group">
+					<label for="city">City</label>
+					<input type="text" class="form-control" id="city">
+				</div>
+				<div class="form-group">
+					<label for="state">State</label>
+					<input type="text" class="form-control" id="state">
+				</div>
+				<div class="form-group">
+					<label for="zip">ZIP</label>
+					<input type="text" class="form-control" id="zip">
+				</div>
+			{% endif %}
             {% for address in shipping_addresses %}
                 {{ show_address(address, doc, "shipping_address_name", select_address) }}
             {% endfor %}
@@ -18,6 +44,32 @@
         <div class="h6 text-uppercase">{{ _("Billing Address") }}</div>
 		<div id="cart-billing-address" class="panel-group"
 			data-fieldname="customer_address">
+			{% if not shipping_addresses %}
+				<div class="form-group">
+					<label for="name">Name</label>
+					<input type="text" class="form-control" id="name" placeholder="Name">
+				</div>
+				<div class="form-group">
+					<label for="address1">Address Line 1</label>
+					<input type="text" class="form-control" id="address1">
+				</div>
+				<div class="form-group">
+					<label for="address2">Address Line 2</label>
+					<input type="text" class="form-control" id="address2">
+				</div>
+				<div class="form-group">
+					<label for="city">City</label>
+					<input type="text" class="form-control" id="city">
+				</div>
+				<div class="form-group">
+					<label for="state">State</label>
+					<input type="text" class="form-control" id="state">
+				</div>
+				<div class="form-group">
+					<label for="zip">ZIP</label>
+					<input type="text" class="form-control" id="zip">
+				</div>
+			{% endif %}
             {% for address in billing_addresses %}
                 {{ show_address(address, doc, "customer_address", select_address) }}
             {% endfor %}
