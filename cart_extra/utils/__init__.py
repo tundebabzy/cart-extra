@@ -9,7 +9,8 @@ def create_cart():
 
 
 def create_lead_if_needed(name):
-    if not frappe.db.exists('Lead', name):
+    possible = frappe.get_all('Lead', filters={'lead_name': name})
+    if not possible:
         lead = frappe.new_doc('Lead')
         lead.lead_name = name
         # Lead source should be user defined in Shopping Cart settings
