@@ -27,5 +27,8 @@ def logout():
         ec_sid = 'ec_session_{0}'.format(sid)
         frappe.cache().set_value(ec_sid, None)
         frappe.local.session['ec_sid'] = ''
+        frappe.local.session['cart_count'] = 0
         frappe.local.cookie_manager.set_cookie(
             'ec_sid', '')
+        frappe.local.cookie_manager.set_cookie(
+            'cart_count', 0)
