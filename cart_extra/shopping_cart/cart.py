@@ -121,6 +121,7 @@ def _get_cart_quotation(party=None):
     Return the open Quotation of type "Shopping Cart" or make a new one
     '''
     lead = None
+    lead_name = None
     if not party:
         session = get_extra_cart_session()
         lead = create_lead_if_needed(session['token'])
@@ -142,7 +143,7 @@ def _get_cart_quotation(party=None):
         quotation = frappe.get_all(
             "Quotation", fields=["name"],
             filters={
-                "party_name": lead.lead_name if lead else lead_name[0].name,
+                "party_name": lead.name if lead else lead_name[0].name,
                 "order_type": "Shopping Cart",
                 "docstatus": 0
             },
@@ -163,7 +164,7 @@ def _get_cart_quotation(party=None):
             "status": "Draft",
             "docstatus": 0,
             "__islocal": 1,
-            "party_name": lead_name[0].name
+            "party_name": lead_name[0].name if lead_name  else lead.name
         })
 
         # qdoc.contact_person = frappe.db.get_value("Contact", {"email_id": frappe.session.user})
