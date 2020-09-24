@@ -17,6 +17,7 @@ def create_lead_if_needed(name):
         lead.source = 'Website Visitor'
         lead.insert(ignore_permissions=True)
         frappe.db.commit()
+        return lead
 
 
 def logout():
