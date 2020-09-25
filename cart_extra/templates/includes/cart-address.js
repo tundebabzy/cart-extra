@@ -5,7 +5,6 @@ $.extend(shopping_cart, {
     bind_billing_button: function() {
         $("#copy").on("click", function() {
             const data = $("#shipping-form").serializeArray();
-            console.log(data)
             data.forEach(item => {
                 $(`#billing #${item.name}`).val(item.value);
             });
