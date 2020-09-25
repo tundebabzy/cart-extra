@@ -8,7 +8,9 @@ from erpnext.shopping_cart.doctype.shopping_cart_settings.\
 from erpnext.shopping_cart.cart import apply_cart_settings,\
     get_applicable_shipping_rules, decorate_quotation_doc,\
     get_shopping_cart_menu as get_shopping_cart_menu_original,\
-    get_cart_quotation as get_cart_quotation_original
+    get_cart_quotation as get_cart_quotation_original,\
+    place_order as place_order_original
+import json
 
 
 def set_cart_count(quotation=None):
@@ -94,11 +96,6 @@ def get_cart_quotation(doc=None):
         doc = quotation
         set_cart_count(quotation)
 
-    # addresses = get_address_docs(party=party)
-
-    # if not doc.customer_address and addresses:
-    #     update_cart_address("customer_address", addresses[0].name)
-
     return {
         "doc": decorate_quotation_doc(doc),
         "shipping_addresses": [],
@@ -114,6 +111,91 @@ def get_shopping_cart_menu(context=None):
     if not context:
         context = get_cart_quotation()
     return get_shopping_cart_menu_original(context=context)
+
+
+@frappe.whitelist(allow_guest=True)
+def place_order(billing_address=None, shipping_address=None):
+    if frappe.session.user != 'Guest':
+        return place_order_original()
+
+    if isinstance(billing_address, str):
+        billing_address = json.loads(billing_address)
+    if isinstance(shipping_address, str):
+        shipping_address = json.loads(shipping_address)
+
+    quotation = _get_cart_quotation()
+
+    _update_lead_name(quotation.party_name)
+    _add_addresses(
+        shipping_address, billing_address, quotation.party_name, quotation)
+
+    cart_settings = frappe.db.get_value(
+        "Shopping Cart Settings", None,
+        ["company", "allow_items_not_in_stock"], as_dict=1)
+    quotation.company = cart_settings.company
+    if not quotation.get("customer_address"):
+        throw(_("{0} is required").format(
+            _(quotation.meta.get_label("customer_address"))))
+
+    quotation.flags.ignore_permissions = True
+    quotation.submit()
+
+    if quotation.quotation_to == 'Lead' and quotation.party_name:
+        # company used to create customer accounts
+        frappe.defaults.set_user_default("company", quotation.company)
+
+    from erpnext.selling.doctype.quotation.quotation import _make_sales_order
+    sales_order = frappe.get_doc(_make_sales_order(
+        quotation.name, ignore_permissions=True))
+    sales_order.payment_schedule = []
+
+    if not cart_settings.allow_items_not_in_stock:
+        for item in sales_order.get("items"):
+            item.reserved_warehouse, is_stock_item = frappe.db.get_value(
+                "Item", item.item_code, ["website_warehouse", "is_stock_item"])
+
+            if is_stock_item:
+                item_stock = get_qty_in_stock(
+                    item.item_code, "website_warehouse")
+                if item.qty > item_stock.stock_qty[0][0]:
+                    throw(
+                        _("Only {0} in stock for item {1}").format(
+                            item_stock.stock_qty[0][0], item.item_code))
+
+    sales_order.flags.ignore_permissions = True
+    sales_order.insert()
+    sales_order.submit()
+
+    if hasattr(frappe.local, "cookie_manager"):
+        frappe.local.cookie_manager.delete_cookie("cart_count")
+
+    return sales_order.name
+
+
+def _add_address(address_type, address, lead_name):
+    doc = frappe.new_doc('Address')
+    doc.address_type = address_type
+    doc.address_line1 = address['address_line1']
+    doc.address_line2 = address['address_line2']
+    doc.city = address['city']
+    doc.pincode = address['pincode']
+    doc.state = address['state']
+    doc.email_id = address['email_id']
+    doc.phone = address['phone']
+    doc.append('links', {
+        'link_doctype': 'Lead',
+        'link_name': lead_name
+    })
+    doc.insert(ignore_permissions=True)
+    return doc.name
+
+
+def _add_addresses(address_shipping, address_billing, lead_name, quotation):
+    shipping_address_name = _add_address(
+        'Shipping', address_shipping, lead_name)
+    billing_address_name = _add_address('Billing', address_billing, lead_name)
+    quotation.customer_address = billing_address_name
+    quotation.shipping_address_name = shipping_address_name
 
 
 def _get_cart_quotation(party=None):
@@ -164,7 +246,7 @@ def _get_cart_quotation(party=None):
             "status": "Draft",
             "docstatus": 0,
             "__islocal": 1,
-            "party_name": lead_name[0].name if lead_name  else lead.name
+            "party_name": lead_name[0].name if lead_name else lead.name
         })
 
         # qdoc.contact_person = frappe.db.get_value("Contact", {"email_id": frappe.session.user})
@@ -182,3 +264,9 @@ def _party(name):
         'name': name,
         'doctype': 'Lead'
     }
+
+
+def _update_lead_name(name):
+    lead = frappe.get_doc("Lead", name)
+    lead.lead_name = name
+    lead.save(ignore_permissions=True)
