@@ -3,6 +3,11 @@
 	{% if addresses|length == 1%}
 		{% set select_address = True %}
 	{% endif %}
+	<style>
+		input:invalid {
+			border-color: #ff5400;
+		}
+	</style>
 	<div class="col-sm-6">
 		<div class="h6 text-uppercase">{{ _("Shipping Address") }}</div>
 		<div id="cart-shipping-address" class="panel-group"
@@ -12,27 +17,47 @@
 					<form id="shipping-form">
 						<div class="form-group">
 							<label for="full_name">Name</label>
-							<input type="text" class="form-control" id="name" name="full_name" placeholder="Name">
+							<input type="text" class="form-control" id="name" name="full_name" placeholder="Name" required>
 						</div>
 						<div class="form-group">
-							<label for="address1">Address Line 1</label>
-							<input type="text" class="form-control" id="address1" name="address1">
+							<label for="address_line1">Address Line 1</label>
+							<input type="text" class="form-control" id="address_line1" name="address_line1" required>
 						</div>
 						<div class="form-group">
-							<label for="address2">Address Line 2</label>
-							<input type="text" class="form-control" id="address2" name="address2">
+							<label for="address_line2">Address Line 2</label>
+							<input type="text" class="form-control" id="address_line2" name="address_line2" required>
+						</div>
+						<div class="row">
+							<div class="col col-sm-4">
+								<div class="form-group">
+									<label for="city">City</label>
+									<input type="text" class="form-control" id="city" name="city" required>
+								</div>
+							</div>
+							<div class="col col-sm-4">
+								<div class="form-group">
+									<label for="state">State</label>
+									<input type="text" class="form-control" id="state" name="state" required>
+								</div>
+							</div>
+							<div class="col col-sm-4">
+								<div class="form-group">
+									<label for="pincode">ZIP</label>
+									<input type="text" class="form-control" id="pincode" name="pincode" required>
+								</div>
+							</div>
 						</div>
 						<div class="form-group">
-							<label for="city">City</label>
-							<input type="text" class="form-control" id="city" name="city">
+							<label for="country">Country</label>
+							<input type="text" class="form-control" id="country" name="country" value="United States" disabled required>
 						</div>
 						<div class="form-group">
-							<label for="state">State</label>
-							<input type="text" class="form-control" id="state" name="state">
+							<label for="phone">Phone Number</label>
+							<input type="text" class="form-control" id="phone" name="phone" required>
 						</div>
 						<div class="form-group">
-							<label for="zip">ZIP</label>
-							<input type="text" class="form-control" id="zip" name="zip">
+							<label for="email_id">Email</label>
+							<input type="email" class="form-control" id="email_id" name="email_id" required>
 						</div>
 					</form>
 				</div>
@@ -56,27 +81,47 @@
 					<form id="billing-form">
 						<div class="form-group">
 							<label for="full_name">Name</label>
-							<input type="text" class="form-control" id="full_name" placeholder="Name" name="full_name">
+							<input type="text" class="form-control" id="full_name" placeholder="Name" name="full_name" required>
 						</div>
 						<div class="form-group">
-							<label for="address1">Address Line 1</label>
-							<input type="text" class="form-control" id="address1" name="address1">
+							<label for="address_line1">Address Line 1</label>
+							<input type="text" class="form-control" id="address_line1" name="address_line1" required>
 						</div>
 						<div class="form-group">
-							<label for="address2">Address Line 2</label>
-							<input type="text" class="form-control" id="address2" name="address2">
+							<label for="address_line2">Address Line 2</label>
+							<input type="text" class="form-control" id="address_line2" name="address_line2" required>
+						</div>
+						<div class="row">
+							<div class="col col-sm-4">
+								<div class="form-group">
+									<label for="city">City</label>
+									<input type="text" class="form-control" id="city" name="city" required>
+								</div>
+							</div>
+							<div class="col col-sm-4">
+								<div class="form-group">
+									<label for="state">State</label>
+									<input type="text" class="form-control" id="state" name="state" required>
+								</div>
+							</div>
+							<div class="col col-sm-4">
+								<div class="form-group">
+									<label for="pincode">ZIP</label>
+									<input type="text" class="form-control" id="pincode" name="pincode" required>
+								</div>
+							</div>
 						</div>
 						<div class="form-group">
-							<label for="city">City</label>
-							<input type="text" class="form-control" id="city" name="city">
+							<label for="country">Country</label>
+							<input type="text" class="form-control" id="country" name="country" value="United States" disabled required>
 						</div>
 						<div class="form-group">
-							<label for="state">State</label>
-							<input type="text" class="form-control" id="state" name="state">
+							<label for="phone">Phone Number</label>
+							<input type="text" class="form-control" id="phone" name="phone" required>
 						</div>
 						<div class="form-group">
-							<label for="zip">ZIP</label>
-							<input type="text" class="form-control" id="zip" name="zip">
+							<label for="email_id">Email</label>
+							<input type="email" class="form-control" id="email_id" name="email_id" required>
 						</div>
 					</form>
 				</div>
