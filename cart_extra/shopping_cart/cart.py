@@ -24,9 +24,9 @@ def set_cart_count(quotation=None):
 
 
 @frappe.whitelist(allow_guest=True)
-def update_cart(item_code, qty, with_items=False):
+def update_cart(item_code, qty, additional_notes=None, with_items=False):
     if frappe.session.user != 'Guest':
-        return original_update_cart(item_code, qty, with_items)
+        return original_update_cart(item_code, qty, additional_notes, with_items)
     else:
         session = get_extra_cart_session()
         create_lead_if_needed(session['token'])
@@ -55,6 +55,7 @@ def update_cart(item_code, qty, with_items=False):
             })
         else:
             quotation_items[0].qty = qty
+            quotation_items[0].additional_notes = additional_notes
 
     apply_cart_settings(quotation=quotation)
 
@@ -100,7 +101,8 @@ def get_cart_quotation(doc=None):
         "doc": decorate_quotation_doc(doc),
         "shipping_addresses": [],
         "billing_addresses": [],
-        "shipping_rules": get_applicable_shipping_rules(party)
+        "shipping_rules": get_applicable_shipping_rules(party),
+        "cart_settings": frappe.get_cached_doc("Shopping Cart Settings")
     }
 
 
