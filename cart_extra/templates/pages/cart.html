@@ -49,7 +49,7 @@
 		<div class="place-order-container">
 			{% if cart_settings.enable_checkout %}
 				<button class="btn btn-primary btn-place-order" type="button">
-					{% if is_guest %}
+					{% if not is_guest %}
 						{{ _("Place Order") }}
 					{% else %}
 						{{ _("Pay") }}
