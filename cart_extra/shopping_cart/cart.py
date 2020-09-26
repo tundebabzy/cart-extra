@@ -24,9 +24,22 @@ def apply_cart_settings(party=None, quotation=None):
     selling_price_list = cart_settings.price_list
     quotation.selling_price_list = selling_price_list
 
+    # reset values
+    quotation.price_list_currency = quotation.currency = \
+        quotation.plc_conversion_rate = quotation.conversion_rate = None
+    for item in quotation.get("items"):
+        item.price_list_rate = item.discount_percentage = item.rate = item.amount = None
+
+    # refetch values
+    quotation.run_method("set_price_list_and_item_details")
+
+    if hasattr(frappe.local, "cookie_manager"):
+        # set it in cookies for using in product page
+        frappe.local.cookie_manager.set_cookie("selling_price_list", quotation.selling_price_list)
+
     quotation.run_method("calculate_taxes_and_totals")
 
-    # set_taxes(quotation, cart_settings)
+    set_taxes(quotation, cart_settings)
 
     _apply_shipping_rule(party, quotation, cart_settings)
 
@@ -39,6 +52,24 @@ def set_cart_count(quotation=None):
 
         if hasattr(frappe.local, "cookie_manager"):
             frappe.local.cookie_manager.set_cookie("cart_count", cart_count)
+
+
+def set_taxes(quotation, cart_settings):
+	"""set taxes based on billing territory"""
+	from erpnext.accounts.party import set_taxes
+
+	customer_group = cart_settings.default_customer_group
+
+	quotation.taxes_and_charges = set_taxes(quotation.party_name, "Lead",
+		quotation.transaction_date, quotation.company, customer_group=customer_group, supplier_group=None,
+		tax_category=quotation.tax_category, billing_address=quotation.customer_address,
+		shipping_address=quotation.shipping_address_name, use_for_shopping_cart=1)
+#
+# 	# clear table
+	quotation.set("taxes", [])
+#
+# 	# append taxes
+	quotation.append_taxes_from_master()
 
 
 @frappe.whitelist(allow_guest=True)
@@ -119,7 +150,7 @@ def get_cart_quotation(doc=None):
         "doc": decorate_quotation_doc(doc),
         "shipping_addresses": [],
         "billing_addresses": [],
-        "shipping_rules": get_applicable_shipping_rules(party),
+        "shipping_rules": get_applicable_shipping_rules(party, doc or quotation),
         "cart_settings": frappe.get_cached_doc("Shopping Cart Settings")
     }
 
