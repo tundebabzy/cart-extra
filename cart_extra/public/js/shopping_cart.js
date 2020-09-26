@@ -41,6 +41,7 @@ erpnext.shopping_cart = $.extend(erpnext.shopping_cart, {
             args: {
                 item_code: opts.item_code,
                 qty: opts.qty,
+                additional_notes: opts.additional_notes !== undefined ? opts.additional_notes : undefined,
                 with_items: opts.with_items || 0
             },
             btn: opts.btn,
