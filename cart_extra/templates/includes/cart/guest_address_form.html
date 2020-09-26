@@ -149,12 +149,13 @@
                         shipping_address: JSON.stringify(shipping_address)
                     };
                 }
-                if (frappe.session.user != 'Guest' || (shipping_is_valid && billing_is_valid)) {
+                if (frappe.session.user !== 'Guest' || (shipping_is_valid && billing_is_valid)) {
+                    const place_order = frappe.session.user === 'Guest' ? "cart_extra.shopping_cart.cart.place_order_and_pay": "erpnext.shopping_cart.cart.place_order";
                     return frappe.call({
                         type: "POST",
-                        method: "erpnext.shopping_cart.cart.place_order",
+                        method: place_order,
                         args,
-                        btn: btn,
+                        freeze: true,
                         callback: function(r) {
                             if(r.exc) {
                                 var msg = "";
@@ -167,7 +168,7 @@
                                     .html(msg || frappe._("Something went wrong!"))
                                     .toggle(true);
                             } else {
-                                const url = frappe.session.user === "Guest" ? "/all-products/" : "/orders/" + encodeURIComponent(r.message);
+                                const url = frappe.session.user === "Guest" ? r.message : "/orders/" + encodeURIComponent(r.message);
                                 window.location.href = url;
                             }
                         }

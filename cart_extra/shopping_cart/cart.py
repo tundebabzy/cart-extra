@@ -2,7 +2,7 @@ import frappe
 from frappe.utils import cint, flt, get_fullname, cstr
 from erpnext.shopping_cart.cart import update_cart as original_update_cart
 from cart_extra.session import get_extra_cart_session
-from cart_extra.utils import create_lead_if_needed
+from cart_extra.utils import create_lead_if_needed, make_payment_request
 from erpnext.shopping_cart.doctype.shopping_cart_settings.\
     shopping_cart_settings import get_shopping_cart_settings
 from erpnext.shopping_cart.cart import apply_cart_settings,\
@@ -172,6 +172,15 @@ def place_order(billing_address=None, shipping_address=None):
         frappe.local.cookie_manager.delete_cookie("cart_count")
 
     return sales_order.name
+
+
+@frappe.whitelist(allow_guest=True)
+def place_order_and_pay(billing_address=None, shipping_address=None):
+    sales_order = place_order(billing_address, shipping_address)
+    payment_request = make_payment_request(
+        dn=sales_order, dt="Sales Order", submit_doc=1,
+        order_type="Shopping Cart")
+    return payment_request
 
 
 def _add_address(address_type, address, lead_name):
