@@ -8,10 +8,10 @@ from erpnext.shopping_cart.product_info import\
 
 
 @frappe.whitelist(allow_guest=True)
-def get_product_info_for_website(item_code):
+def get_product_info_for_website(item_code, skip_quotation_creation=False):
     """get product price / stock info for website"""
     if frappe.session.user != 'Guest':
-        return get_product_info_for_website_original(item_code)
+        return get_product_info_for_website_original(item_code, skip_quotation_creation)
 
     cart_quotation = _get_cart_quotation()
     cart_settings = get_shopping_cart_settings()
