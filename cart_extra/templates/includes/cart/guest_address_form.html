@@ -1,0 +1,185 @@
+<div class="row">
+    <div class="col col-sm-12 col-sm-6 col-lg-6">
+        <h6 class="text-uppercase">{{ _("Shipping Address") }}</h6>
+        <div id="shipping">
+            <form id="shipping-form">
+                <div class="form-group">
+                    <label for="full_name">Name</label>
+                    <input type="text" class="form-control" id="name" name="full_name" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="address_line1">Address Line 1</label>
+                    <input type="text" class="form-control" id="address_line1" name="address_line1" required>
+                </div>
+                <div class="form-group">
+                    <label for="address_line2">Address Line 2</label>
+                    <input type="text" class="form-control" id="address_line2" name="address_line2">
+                </div>
+                <div class="row">
+                    <div class="col col-sm-4">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" class="form-control" id="city" name="city" required>
+                        </div>
+                    </div>
+                    <div class="col col-sm-4">
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" class="form-control" id="state" name="state" required>
+                        </div>
+                    </div>
+                    <div class="col col-sm-4">
+                        <div class="form-group">
+                            <label for="pincode">ZIP</label>
+                            <input type="text" class="form-control" id="pincode" name="pincode" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" class="form-control" id="country" name="country" value="United States" disabled required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email_id">Email</label>
+                    <input type="email" class="form-control" id="email_id" name="email_id" required>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col col-sm-12 col-sm-6 col-lg-6">
+        <h6 class="text-uppercase">{{ _("Billing Address") }}</h6>
+        <div id="billing">
+            <form id="billing-form">
+                <div class="form-group">
+                    <label for="full_name">Name</label>
+                    <input type="text" class="form-control" id="full_name" placeholder="Name" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="address_line1">Address Line 1</label>
+                    <input type="text" class="form-control" id="address_line1" name="address_line1" required>
+                </div>
+                <div class="form-group">
+                    <label for="address_line2">Address Line 2</label>
+                    <input type="text" class="form-control" id="address_line2" name="address_line2">
+                </div>
+                <div class="row">
+                    <div class="col col-sm-4">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" class="form-control" id="city" name="city" required>
+                        </div>
+                    </div>
+                    <div class="col col-sm-4">
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" class="form-control" id="state" name="state" required>
+                        </div>
+                    </div>
+                    <div class="col col-sm-4">
+                        <div class="form-group">
+                            <label for="pincode">ZIP</label>
+                            <input type="text" class="form-control" id="pincode" name="pincode" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" class="form-control" id="country" name="country" value="United States" disabled required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email_id">Email</label>
+                    <input type="email" class="form-control" id="email_id" name="email_id" required>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    frappe.ready(() => {
+        frappe.provide("erpnext.shopping_cart");
+        var shopping_cart = erpnext.shopping_cart;
+
+        $.extend(shopping_cart, {
+            bind_billing_button: function() {
+                $("#copy").on("click", function() {
+                    const data = $("#shipping-form").serializeArray();
+                    data.forEach(item => {
+                        $(`#billing #${item.name}`).val(item.value);
+                    });
+                })
+            },
+            harvest_billing_address: function() {
+                const data = $("#billing-form").serializeArray();
+                const result = {};
+                data.forEach(item => {
+                    result[item.name] = item.value
+                });
+                return result;
+            },
+            harvest_shipping_address: function() {
+                const data = $("#shipping-form").serializeArray();
+                const result = {};
+                data.forEach(item => {
+                    result[item.name] = item.value
+                });
+                return result;
+            },
+            place_order: function(btn) {
+                let billing_address = null;
+                let shipping_address = null;
+                let shipping_is_valid = null;
+                let billing_is_valid = null;
+                let args = {};
+
+                if (frappe.session.user == 'Guest') {
+                    billing_address = shopping_cart.harvest_billing_address();
+                    shipping_address = shopping_cart.harvest_shipping_address();
+                    shipping_is_valid = shopping_cart.validate($("#shipping-form"))
+                    billing_is_valid = shopping_cart.validate($("#billing-form"));
+                    args = {
+                        billing_address: JSON.stringify(billing_address),
+                        shipping_address: JSON.stringify(shipping_address)
+                    };
+                }
+                console.log(args.billing_address)
+                if (frappe.session.user != 'Guest' || (shipping_is_valid && billing_is_valid)) {
+                    return frappe.call({
+                        // type: "POST",
+                        method: "erpnext.shopping_cart.cart.place_order",
+                        args,
+                        // btn: btn,
+                        callback: function(r) {
+                            if(r.exc) {
+                                var msg = "";
+                                if(r._server_messages) {
+                                    msg = JSON.parse(r._server_messages || []).join("<br>");
+                                }
+
+                                $("#cart-error")
+                                    .empty()
+                                    .html(msg || frappe._("Something went wrong!"))
+                                    .toggle(true);
+                            } else {
+                                window.location.href = "/orders/" + encodeURIComponent(r.message);
+                            }
+                        }
+                    });
+                }
+            },
+            validate: function(formElement) {
+                return formElement[0].reportValidity();
+            }
+        });
+
+        shopping_cart.bind_billing_button();
+
+    })
+</script>
