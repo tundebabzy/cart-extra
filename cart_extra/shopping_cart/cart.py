@@ -5,12 +5,30 @@ from cart_extra.session import get_extra_cart_session
 from cart_extra.utils import create_lead_if_needed, make_payment_request
 from erpnext.shopping_cart.doctype.shopping_cart_settings.\
     shopping_cart_settings import get_shopping_cart_settings
-from erpnext.shopping_cart.cart import apply_cart_settings,\
-    get_applicable_shipping_rules, decorate_quotation_doc,\
+from erpnext.shopping_cart.cart import get_applicable_shipping_rules,\
+    decorate_quotation_doc, _apply_shipping_rule,\
     get_shopping_cart_menu as get_shopping_cart_menu_original,\
     get_cart_quotation as get_cart_quotation_original,\
     place_order as place_order_original
 import json
+
+
+def apply_cart_settings(party=None, quotation=None):
+    # if not party:
+    # 	party = get_party()
+    if not quotation:
+        quotation = _get_cart_quotation(party)
+
+    cart_settings = frappe.get_doc("Shopping Cart Settings")
+
+    selling_price_list = cart_settings.price_list
+    quotation.selling_price_list = selling_price_list
+
+    quotation.run_method("calculate_taxes_and_totals")
+
+    # set_taxes(quotation, cart_settings)
+
+    _apply_shipping_rule(party, quotation, cart_settings)
 
 
 def set_cart_count(quotation=None):
