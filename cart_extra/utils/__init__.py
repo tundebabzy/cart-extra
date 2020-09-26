@@ -16,7 +16,6 @@ def create_lead_if_needed(name):
         # Lead source should be user defined in Shopping Cart settings
         lead.source = 'Website Visitor'
         lead.insert(ignore_permissions=True)
-        frappe.db.commit()
         return lead
 
 
