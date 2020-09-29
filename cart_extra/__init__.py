@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # The monkey patch belows exists to make it possible to override the
 # cart page
-from __future__ import unicode_literals
 import frappe
 from frappe.website import router
 from frappe.website.router import get_start_folders, get_page_info
 from erpnext.templates.pages import cart
-from cart_extra.templates.pages.cart import get_context
+
 import os
 
 __version__ = '0.0.1'
@@ -19,11 +18,8 @@ def get_context_fn(context):
     This monkey-patch lets us dynamically determine use the cart-extra defined
     `get_context` function or default to the original
     """
-    if frappe.session.user == 'Guest':
-        return get_context(context)
-    else:
-        return original_context_fn(context)
-
+    from cart_extra.templates.pages.cart import get_context
+    return get_context(context)
 
 def get_page_info_from_template(path):
     '''Return page_info from path'''
